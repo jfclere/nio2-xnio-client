@@ -208,7 +208,7 @@ public class JioClient extends Thread {
 			counter++;
 		}
 		
-		for (int d : delays) {
+		for (Long d : delays) {
 			System.out.println(d);
 		}
 	}
