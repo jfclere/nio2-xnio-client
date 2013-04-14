@@ -166,15 +166,46 @@ public class JioClient extends Thread {
 		sleep(DEFAULT_DELAY + (new Random()).nextInt(COUNTER.get()));
 		long time = 0;
 		String response = null;
-		List<Integer> delays = new ArrayList<Integer>();
-		
+		int counter = 0;
+		int min_count = 10 * 1000 / delay;
+		int max_count = 50 * 1000 / delay;
+
+		List<Long> delays = new ArrayList<Long>();
+
+                long timeWrite;
+                long timeRead;
+                long startTime = System.nanoTime();
 		while ((this.max--) > 0) {
+                        // long wait = this.delay - time;
+                        // if (wait>0)
+			//    sleep(wait);
+			// time = System.currentTimeMillis();
+			//System.out.println("WRITE TO SERVER");
 			sleep(this.delay);
-			time = System.currentTimeMillis();
+		        timeWrite =  System.nanoTime();
 			write("GET /data/file.txt?jSessionId=" + this.sessionId + " HTTP/1.1" + CRLF);
 			response = read();
-			time = System.currentTimeMillis() - time;
-			delays.add((int) time);
+			// time = System.currentTimeMillis() - time;
+			timeRead = System.nanoTime();
+			// delays.add(time);
+			System.out.println("WRITE " + (timeWrite - startTime) + " READ " + (timeRead - startTime));
+		        delays.add(timeRead - timeWrite);
+
+			/*
+			 * if (counter >= min_count && counter <= max_count) {
+			 * // update the average response time
+			 * avg_time += time;
+			 * // update the maximum response time
+			 * if (time > max_time) {
+			 * max_time = time;
+			 * }
+			 * // update the minimum response time
+			 * if (time < min_time) {
+			 * min_time = time;
+			 * }
+			 * }
+			 */
+			counter++;
 		}
 		
 		for (int d : delays) {

@@ -75,10 +75,11 @@ printf "\tDelay = $delay ms\n";
 printf "\tTotal number requests = $nReq\n";
 printf "\n\t-> Log file: $filename\n";
 
-java $JAVA_OPTS -jar target/nio2-xnio-client.jar $host $port $n $delay $nReq > $log_file
+java $JAVA_OPTS -jar target/nio2-xnio-client.jar $host $port $n $delay $nReq > /tmp/$log_file
 
 #printf "max \t min \t avg\n" > $filename
-egrep -v '[a-zA-Z]|^\s*$' $log_file > $filename
+#egrep -v '[a-zA-Z]|^\s*$' /tmp/$log_file > $filename
+grep ^WRITE /tmp/$log_file > $filename
 cat $filename >> ~/$prefix-log.txt
 
 #mvn exec:java -Dexec.mainClass="org.jboss.test.client.LogParser" -Dexec.args="$filename"
